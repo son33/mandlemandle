@@ -1,5 +1,11 @@
-# mandlemandle
-맨들맨들은 맨토와 맨티를 연결시켜주는 플랫폼으로,
-숨고와 크몽을 참고하여 제작했습니다.
+💻 프로젝트 소개
+사이트명 : mandlemandle
+맨토, 맨티 연결 플랫폼
+📕 프로젝트 목적
+맨토와 맨티 연결
+커뮤니티 (정보 공유)
 
-java, javaScript으로 작성하였고, jsp, servlet 기반으로 동작됩니다.
+⚙ 개발환경
+Frontend : JSP, HTML, JavaScript, Jquery
+Backend : Servlet
+DataBase : Oracle
