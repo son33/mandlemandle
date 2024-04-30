@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="messageMapper">
+	<resultMap id="chatroomResultSet" type="chatroom">
+	    <id column="ROOM_NO" property="roomNo"/>
+	    <result column="ROOM_DATE" property="roomDate"/>
+	    <result column="STATUS" property="status"/>
+	    <result column="MTI_NO" property="mtiNo"/>
+	    <result column="MTO_NO" property="mtoNo"/>
+	</resultMap>
+	<resultMap id="messageResultSet" type='message'>
+		<id column="MESSAGE_NO" property="messageNo"/>
+		<result column="MESSAGE_CONTENT" property="messageContent"/>
+		<result column="MESSAGE_DATE" property="messageDate"/>
+		<result column="STATUS" property="status"/>
+		<result column="ROOM_NO" property="roomNo"/>
+	</resultMap>
+</mapper>

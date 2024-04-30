@@ -1,0 +1,73 @@
+@charset "UTF-8";
+
+.mentorRequest-wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	padding-bottom: 10px;
+}
+
+.mentorRequest {
+	width: 700px;
+	background-color: #57D9FF;
+	border-radius: 10px;
+	padding: 20px;
+	box-sizing: border-box;
+	margin-bottom: 20px;
+}
+
+.mentorRequest h2 {
+	text-indent: 20px;
+	margin: 200;
+	color: white;
+}
+
+.mentorRequestList {
+	width: 100%;
+	max-width: 700px;
+	box-sizing: border-box;
+}
+
+.mentorRequestItem {
+	background-color: white;
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
+	box-sizing: border-box;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px;
+	border-radius: 8px;
+}
+
+.mentorInfo {
+	flex: 1;
+	display: flex;
+	align-items: center;
+}
+
+.mentorStatus {
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	margin-left: 10px;
+}
+
+.online {
+	background-color: #4CAF50; /* 온라인 색상: 녹색 */
+}
+
+.offline {
+	background-color: #ccc; /* 오프라인 색상: 회색 */
+}
+
+.reportButton {
+	background-color: #FF0000;
+	color: white;
+	padding: 8px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+}

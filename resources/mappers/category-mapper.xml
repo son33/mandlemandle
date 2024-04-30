@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="categoryMapper">
+	<!-- 메인페이지 카테고리 선택 -->
+	<select id="getMainCategoryList" resultType="subCategory">
+		SELECT * FROM(SELECT SUBCATEGORY_NAME FROM (SELECT S.SUBCATEGORY_NAME, COUNT(S.SUBCATEGORY_NO) FROM PORTFOLIO P LEFT JOIN SUB_CATEGORY S ON (P.SUBCATEGORY_NO = S.SUBCATEGORY_NO) GROUP BY S.SUBCATEGORY_NAME ORDER BY COUNT(S.SUBCATEGORY_NO) DESC)) WHERE ROWNUM &lt;= 6
+	</select>
+	<!-- 모든 카테고리 조회 -->
+	<select id="allCategory" resultType="subCategory">
+		SELECT CATEGORY_NAME, SUBCATEGORY_NAME FROM SUB_CATEGORY LEFT JOIN BIG_CATEGORY ON CATEGORY_NO = REF_CATEGORY_NO ORDER BY CATEGORY_NAME
+	</select>
+	<!-- 메인페이지 카테고리 검색 -->
+	<select id="searchCategoryList" resultType="subCategory">
+		SELECT CATEGORY_NAME, SUBCATEGORY_NAME FROM SUB_CATEGORY LEFT JOIN BIG_CATEGORY ON CATEGORY_NO = REF_CATEGORY_NO WHERE SUBCATEGORY_NAME LIKE '%' || #{search} || '%' ORDER BY CATEGORY_NAME
+	</select>
+	<!-- 포트폴리오 큰 카테고리 선택 -->
+	<select id="selectBigCategory" resultType="BigCategory">
+		SELECT CATEGORY_NAME, CATEGORY_NO FROM BIG_CATEGORY
+	</select>
+	<!-- 포트폴리오 작은 카테고리 선택 -->
+	<select id="selectSubCategory" resultType="subCategory">
+		SELECT SUBCATEGORY_NAME, SUBCATEGORY_NO FROM SUB_CATEGORY S JOIN BIG_CATEGORY B ON S.REF_CATEGORY_NO = B.CATEGORY_NO WHERE B.CATEGORY_NO = #{categoryNo}
+	</select>
+</mapper>

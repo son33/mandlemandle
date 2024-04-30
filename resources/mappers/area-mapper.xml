@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="areaMapper">
+	<resultMap id="sidoResultSet" type="sido">
+		<id column="SIDO_NO" property="sidoNo" />
+		<result column="SIDO_NAME" property="sidoName" />
+	</resultMap>
+	<resultMap id="sigunguResultSet" type="sigungu">
+		<id column="SIGUNGU_NO" property="sigunguNo" />
+		<result column="SIGUNGU_NAME" property="sigunguName" />
+		<result column="SIDO_NO" property="sidoNo" />
+	</resultMap>
+	
+	<select id="selectSido" resultType="sido">
+		SELECT SIDO_NO, SIDO_NAME FROM SIDO
+	</select>
+	<select id="selectSigungu" resultType="sigungu">
+		SELECT SIGUNGU_NAME, SIGUNGU_NO FROM SIDO SD JOIN SIGUNGU SG ON SG.SIDO_NO = SD.SIDO_NO WHERE SG.SIDO_NO = #{sigunguNo}
+	</select>
+</mapper>

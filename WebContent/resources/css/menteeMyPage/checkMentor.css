@@ -1,0 +1,63 @@
+@charset "UTF-8";
+
+.mentorRequest-wrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-top: 50px;
+	padding-bottom: 10px;
+}
+
+.favoriteMentor {
+	width: 700px;
+	border-radius: 10px;
+	padding-bottom: 10px;
+}
+
+.multi-accordion {
+	width: 100%;
+}
+
+details {
+	border-radius: 10px;
+	padding: .5em .5em 0;
+	margin-bottom: 1em;
+	overflow: hidden;
+}
+
+summary {
+	background-color: #57D9FF;
+	font-weight: bold;
+	margin: -.5em -.5em 0;
+	padding: .5em;
+	cursor: pointer;
+	border-radius: 10px 10px 0 0;
+	position: relative;
+	transition: border-radius 0.3s;
+}
+
+summary a {
+	display: none;
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: .5em;
+	background-color: #57D9FF;
+	border-radius: 0 10px 0 0;
+	text-decoration: none;
+	color: #fff;
+}
+
+details[open] summary {
+	border-bottom: 1px solid #57D9FF;
+	margin-bottom: .5em;
+	border-radius: 10px 10px 0 0;
+}
+
+details[open] summary a {
+	display: inline;
+}
+
+.favoriteMentor h2 {
+	text-indent: 20px;
+}

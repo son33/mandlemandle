@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="requestMapper">
+	<resultMap id="requestResultSet" type="request">
+		<id column="REQUEST_NO" property="requestNo" />
+		<result column="REQUEST_DATE" property="requestDate" />
+		<result column="REQUEST_CONTENT" property="requestContent" />
+		<result column="STATUS" property="status" />
+		<result column="REQUEST_STATUS" property="requestStatus" />
+		<result column="MTI_NO" property="mtiNo" />
+		<result column="MTO_NO" property="mtoNo" />
+	</resultMap>
+	
+	<insert id="insertRequest">
+		INSERT INTO REQUEST VALUES(SEQ_REQUESTNO.NEXTVAL, SYSDATE, #{requestContent}, 'Y', 'W', #{mtiNo}, #{mtoNo})
+	</insert>
+	
+	<select id="getMentorRequest" resultType="request">
+		SELECT * FROM REQUEST WHERE MTI_NO = #{mtiNo} AND MTO_NO = #{mtoNo} AND STATUS = 'Y'
+	</select>
+	
+	<select id="getRequestList" resultType="request">
+		SELECT R.REQUEST_NO, R.REQUEST_STATUS, R.REQUEST_DATE, R.REQUEST_CONTENT, MTI_NO, R.MTO_NO, M.USER_NAME
+		FROM REQUEST R
+		LEFT JOIN MEMBER M ON R.MTO_NO = M.USER_NO
+		WHERE R.STATUS='Y' AND (MTI_NO = #{mtiNo} OR MTO_NO = #{mtoNo})
+	</select>
+	
+	<select id="selectRequest" resultType="request">
+		SELECT *
+		FROM REQUEST
+		WHERE REQUEST_NO = #{requestNo} AND (MTO_NO = #{mtoNo} OR MTI_NO = #{mtiNo})
+	</select>
+	<update id="refuseRequest">
+		UPDATE REQUEST SET REQUEST_STATUS = 'N' WHERE REQUEST_NO = #{requestNo}
+	</update>
+	<update id="acceptRequest">
+		UPDATE REQUEST SET REQUEST_STATUS = 'Y' WHERE REQUEST_NO = #{requestNo}
+	</update>
+	
+</mapper>

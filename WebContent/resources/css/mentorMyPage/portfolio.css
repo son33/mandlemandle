@@ -1,0 +1,75 @@
+@charset "UTF-8";
+/* 포트폴리오 */
+.wrapper{display:flex; justify-content:center; align-items:center; flex-direction:column;}
+
+/* 포트폴리오 상부 */
+.portfolio{display:flex; flex-direction:column; align-items:center; width:800px; margin-top:50px;}
+.portfolio form{width:100%;}
+.portfolio-top{display:flex; width:100%; height:160px; justify-content:center; align-items:center;}
+.portfolio-top>div{width:20%; height:100%; font-size:25px; text-align:center;}
+.portfolio-profile{width:90%; height:90%;}
+.portfolio-profile-img img{width:160px; height:160px; border-radius:30px;}
+.text-bottom{display:flex; flex-direction:column; justify-content:flex-end; align-items:center;}
+.grade div{width:100%; height:50%;}
+.review-count div{width:100%; height:50%;}
+.agree-count div{width:100%; height:50%;}
+.open-check div{width:100%; height:50%;}
+.toggle_switch { display: inline-block; position: relative; width: 70px; height: 34px; } 
+.toggle_switch input[type="checkbox"] { overflow: hidden; position: absolute; width: 1px; height: 1px; margin: -1px; font-size: initial; clip: rect(0 0 0 0); } 
+.toggle_switch .slider { position: absolute; top: 0; right: 0; bottom: 0; left: 0; background-color: #ccc; border-radius: 34px; cursor: pointer; transition: 0.4s; } 
+.toggle_switch input[type="checkbox"]:checked + .slider { background-color: #007bff; } 
+.toggle_switch .slider::before { content: ""; position: absolute; top: 4px; left: 4px; width: 26px; height: 26px; background-color: #fff; border-radius: 50%; transition: 0.4s; } 
+.toggle_switch input[type="checkbox"]:checked + .slider::before { transform:translateX(36px); }
+
+/* 포트폴리오 내용 */
+.introduce-wrapper{width:100%; margin:50px 0;}
+.introduce{display:block; margin-bottom:10px;}
+.header{display:flex; width:100%}
+.header-title{width:80%}
+.header-title>h2{font-size:50px; font-weight:700; width:auto;}
+.update-wrapper{width:20%;}
+.update{color:#57D9FF; font-size:30px; font-weight:500; display:flex; justify-content:flex-end;}
+.info{padding-top:20px;}
+.value{width:950px; font-size:20px; resize:none; border:none;}
+.value-online{height:100px;}
+.value-editer{height:300px;}
+.dropdown{width:200px; padding-right:10px; font-size:20px;}
+.dropdown select{width:160px;}
+.dropdown>button{width:100%; text-align:left;}
+.dropdown-menu{width:200px;}
+.dropdown-toggle::after{margin-left:6em;}
+.portfolio-button{height:50px; display:flex; justify-content:center; align-items:center;}
+.textarea-border{border:1px solid #ebedf0; border-radius:10px;}
+
+/* 별점 */
+.score-box{display:flex; flex-direction:row-reverse;}
+.score-box div{display:inline-block; border:0;}
+.score-box input[type=radio]{display:none;}
+.score-box label{font-size:1em; color:transparent; text-shadow:0 0 0 #f0f0f0;}
+.score-box label:hover{text-shadow: 0 0 0 yellow;}
+.score-box label:hover ~ label{text-shadow: 0 0 0 yellow;}
+.score-box div{display:inline-block; direction:rtl; border:0;}
+.score-box div span{text-align:left;}
+.score-box input[type=radio]:checked ~ label{text-shadow:0 0 0 yellow;}
+.btn{margin-left:30px;}
+
+/* 사진 */
+.photo-wrapper{width:100%;}
+.img-table{width:100%;}
+.img-table tr{height:250px;}
+.img-table td{width:25%;}
+.img{width:200px; height:200px; padding:5px;}
+
+/* 리뷰 */
+.portfolio-review-wrapper{font-size:17px; margin-top:50px;}
+#review-area{display:flex; justify-content:center;}
+.review-table tr{border-top:2px solid #57D9FF;}
+.review-table div{margin-bottom:10px;}
+.reviewInput tr{display:flex; flex-direction:column;}
+.review-wrapper{display:flex; width:500px;}
+.review-image{width:200px; height:120px;}
+.review-image img{width:110px; height:110px;}
+.reviewTitle{width:500px;}
+.reviewContent{width:500px;}
+
+.editable {border:1px solid #ced4da; padding:5px; margin-bottom:10px; background-color:#f8f9fa;}

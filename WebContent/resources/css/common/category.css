@@ -1,0 +1,7 @@
+@charset "UTF-8";
+.category{margin-top:50px;}
+.category-depth1{height:100%; margin-top:20px; display:flex; flex-direction:column;}
+.category-depth1>li{font-size:30px; font-weight:600; margin-top:10px; margin-bottom:10px;}
+.category-depth2{height:100%; margin-top:10px; margin-bottom:10px; margin-left:-40px; text-align:left; display:flex; align-items:flex-start;}
+.category-depth2>li{height:100%; float:left; width:120px; text-align:center;}
+.category-depth2 a{ font-size:20px; font-weight:600; color:black;}

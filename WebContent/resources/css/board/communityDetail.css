@@ -1,0 +1,19 @@
+@charset "UTF-8";
+
+.detail-wrapper{margin: auto; width: 600px; padding: 20px;}
+.detail-content{width:100%; height:100%;}
+.content-top{padding:10px;}
+.content-bottom{padding:10px;}
+.content-top div{border-bottom:2px solid #dcf7fc; padding-top:10px;}
+.title p{font-weight:600;}
+.content-button{padding-top:50px; display:flex; justify-content:center;}
+.content-button a{padding:5px;}
+#reply-area{padding-top:50px;}
+#reply-table{width:100%;}
+.reply-body{width:100%;}
+.reply-body tr{display:flex; padding-top:50px; border-bottom:2px solid #dcf7fc;}
+.reply-userName{width:15%;}
+.reply-content{width:50%;}
+.reply-createDate{width:25%;}
+.deleteButton{width:10%;}
+

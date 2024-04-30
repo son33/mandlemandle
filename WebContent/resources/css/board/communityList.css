@@ -1,0 +1,89 @@
+@charset "UTF-8";
+
+.notice{width:100%;}
+.page-container{display:flex; flex-direction:column; align-items:center;}
+.page-title{margin-bottom: 60px;}
+.page-title h3{font-size:28px; color:#333333; font-weight:400; text-align:center; margin-top:50px;}
+.page-content{width:100%;}
+.page-btn{display:flex; flex-direction:row; height:70px;}
+#writeBtn {
+	width:100px;
+	height:35px;
+	font-size:17px;
+	text-align:center;
+	background-color:#00c3ff;
+	border:none;
+	border-radius:5px;
+	color:white;
+	font-weight:700;
+}
+.search-area{width:90%; padding-left:50px;}
+.board-container{display:flex; justify-content:center;}
+.board-table{width:90%;}
+tr {border-bottom: 0.8px solid #ececec;}
+.board-table th{text-align:center;}
+.board-table td{text-align:center; height:80px;}
+#pagingArea{display:flex; justify-content:center;}
+.pagination{display:flex;}
+.page-item{padding-left:10px;}
+#btnArea-three {margin-bottom:30px;}
+#reportBtn {
+	background-color: transparent;
+	color: #7D7D7D;
+	border: none;
+	width: 35px;
+	height: 22px;
+	float: right;
+	margin-left: 5px;
+}
+#deleteBtn {
+	background-color: transparent;
+	color: #7D7D7D;
+	border: none;
+	width: 35px;
+	height: 22px;
+	float: right;
+	margin-left: 5px;
+}
+#changeBtn {
+	background-color: transparent;
+	color: #7D7D7D;
+	border: none;
+	width: 35px;
+	height: 22px;
+	float: right;
+	margin-left: 5px;
+}
+.hello {
+	margin-bottom: 30px;
+}
+#td-boardNo {
+	font-size: 14px;
+	color: #8d8d8d;
+	margin-top: 20px;
+}
+#td-boardDivideName {
+	font-size: 14px;
+	color: #8d8d8d;
+}
+#td-userName {
+	font-size: 14px;
+	color: #333;
+}
+#td-count {
+	font-size: 13px;
+	color: #8d8d8d;
+}
+#td-boardTitle {
+	font-size: 20px;
+	color: #3f3f3f;
+	font-weight: 700;
+}
+#td-createDate {
+	font-size: 14px;
+	color: #8d8d8d;
+}
+#background-tr {
+	background-color: #f9f9f9;
+	padding-right: 20px;
+}

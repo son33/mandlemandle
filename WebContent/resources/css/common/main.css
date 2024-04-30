@@ -1,0 +1,70 @@
+@charset "UTF-8";
+/* main 시작 */
+textarea:focus {outline: none;}
+/* category */
+.category{margin-top:50px;}
+.category-depth1{height:100%; margin-top:25px; display:flex; flex-direction:column;}
+.category-depth1>li{margin-left:50px; font-size:30px; font-weight:600; margin-bottom:30px;}
+.category-depth2{height:100%; margin-top:25px; text-align:left;}
+.category-depth2>li{height:100%; float:left; width:120px; text-align:center;}
+.category-depth2 a{ font-size:20px; font-weight:600; color:black;}
+
+/* community */
+.community{width:100%; height:400px; display:flex; padding-top:50px;}
+.horizontal-list {display: flex; flex-direction: row; justify-content:space-between; padding:0;}
+.listbox {width:450px; display:flex; flex-direction:column; margin:25px;}
+.curious,.share{width:50%;}
+.community-wrapper{width:100%; height:130px;}
+.community-title{color:black; font-size:30px; font-weight:600; margin-left:30px; margin-right:30px; margin-top:-70px; margin-bottom:20px;}
+.community-box{box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2); padding-top:10px; padding-right:10px; border-radius:10px;}
+.communityList{margin-bottom:15px;}
+.boardtitle{font-size:20px; color:black; font-weight:300;}
+.boardcontent{font-size:15px; color:black; font-weight:200; overflow:hidden; height:50px;}
+.view-reply{display:flex; font-size:10px;}
+.reply{display:flex;}
+.count{display:flex;}
+
+/* mentor recommend */
+.recommend-wrapper{width:100%; height:400px; padding-top:50px;}
+.recommend-title{margin-left:50px; font-size:30px; font-weight:600;}
+.recommend-swiper{width:100%; height:400px;}
+.recommend-content{width:300px; height:300px; color:black;}
+.recommend-content>a{width:100%; height:100%; display:grid;}
+.recommend-mentor{width:90%; height:90%; display:flex; flex-direction:column; justify-self:center; align-self:center; padding:10px; border-radius:10px; color:black; box-shadow:3px 3px 5px rgba(0, 0, 0, 0.2);}
+.mentor-profile{width:100%; height:30%; display:flex; justify-content:center;}
+.mentor-profile div{width:30%; height:100%;}
+.mentor-image>img{border-radius:5px;}
+.mentor-rating{display:flex;}
+.mentor-rating>img{width:20px; height:20px;}
+.mentor-name{width:100%; height:20%; margin-top:10%; display:flex; font-size:20px;}
+.mentor-oneline{width:250px; height:100px; display:flex; font-size:15px; text-align:left;}
+
+/* live reviews */
+.liveReview{width:100%; height:350px; padding-top:100px; margin-bottom:100px;}
+.liveReview-title{margin-left:50px; font-size:30px; font-weight:600;}
+.liveReview-content{width:100%; height:230px;}
+.review-wrapper{width:500px; height:200px; display:flex; border-radius: 10px; box-shadow:3px 3px 5px rgba(0, 0, 0, 0.2);}
+.review-image{display:flex; flex-direction:column; align-items:center;}
+.review-image img{width:150px; height:150px; margin-left:10px; margin-top:10px; border-radius:5px;}
+.review-text{width:100%; text-align:center; }
+.review-mentorid{margin-top:10px; font-size:15px;}
+.review-menteeid{padding-left:20px; margin-top:20px; display:flex;}
+.review-title{padding-left:20px; margin-top:10px; display:flex; width:300px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.review-content{padding-left:20px; margin-top:10px; display:flex; width:300px; height:70px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.review-score>img{width:20px; height:20px;}
+
+/* swiper */
+.swiper {width:100%; height:100%;}
+.swiper-slide {text-align:center; font-size:18px; background:#fff; display:flex; justify-content:center; align-items:center;}
+.swiper-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: flex;
+    transition-property: transform;
+    transition-timing-function: var(--swiper-wrapper-transition-timing-function,initial);
+    box-sizing: content-box
+}
+
+/* main 끝 */

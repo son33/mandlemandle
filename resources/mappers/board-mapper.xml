@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boardMapper">
+	<resultMap id="replyResultSet" type="reply">
+		<id column="REPLY_NO" property="replyNo" />
+		<result column="REPLY_CONTENT" property="replyContent" />
+		<result column="CREATE_DATE" property="createDate" />
+		<result column="MODIFY_DATE" property="modifyDate" />
+		<result column="STATUS" property="status" />
+		<result column="BOARD_NO" property="boardNo" />
+		<result column="USER_NO" property="userNo" />
+	</resultMap>
+
+	<resultMap id="boardResultSet" type='board'>
+		<id column="BOARD_NO" property="boardNo" />
+		<result column="BOARD_TITLE" property="boardTitle" />
+		<result column="BOARD_CONTENT" property="boardContent" />
+		<result column="COUNT" property="count" />
+		<result column="CREATE_DATE" property="createDate" />
+		<result column="MODIFY_DATE" property="modifyDate" />
+		<result column="STATUS" property="status" />
+		<result column="USER_NO" property="userNo" />
+		<result column="USER_NAME" property="userName" />
+		<result column="BOARD_DIVIDE_NO" property="boardDivideNo" />
+		<result column="BOARD_DIVIDE_NAME" property="boardDivideName" />
+	</resultMap>
+	
+	<resultMap id="ReviewResultSet" type='review'>
+		<id column="REVIEW_NO" property="reviewNo" />
+		<result column="REVIEW_TITLE" property="reviewTitle" />
+		<result column="REVIEW_CONTENT" property="reviewContent" />
+		<result column="CREATE_DATE" property="createDate" />
+		<result column="MODIFY_DATE" property="modifyDate" />
+		<result column="STATUS" property="status" />
+		<result column="REF_PNO" property="refPno" />
+		<result column="USER_NO" property="userNo" />
+		<result column="SCORE" property="score" />
+		<result column="USER_NAME" property="userName" />
+	</resultMap>
+	
+	<!-- 메인페이지 커뮤니티 불러오기(궁금해요) -->
+	<select id="getCommunityList1" resultType="board">
+		SELECT *
+		FROM (
+		    SELECT 
+		        B.BOARD_NO, 
+		        B.BOARD_TITLE, 
+		        B.BOARD_CONTENT, 
+		        B.COUNT, 
+		        B.CREATE_DATE, 
+		        M.USER_NAME, 
+		        COALESCE(COUNT(R.REPLY_NO), 0) AS replyCount
+		    FROM BOARD B
+		    JOIN BOARD_DIVIDE BD USING (BOARD_DIVIDE_NO)
+		    JOIN MEMBER M USING (USER_NO)
+		    LEFT JOIN REPLY R ON B.BOARD_NO = R.BOARD_NO
+		    WHERE BOARD_DIVIDE_NO = 40 AND B.STATUS = 'Y'
+		    GROUP BY B.BOARD_NO, B.BOARD_TITLE, B.BOARD_CONTENT, B.COUNT, B.CREATE_DATE, M.USER_NAME
+		    ORDER BY B.COUNT
+		)
+		WHERE ROWNUM &lt;= 2
+	</select>
+		
+	<!-- 메인페이지 커뮤니티 불러오기(함께해요) -->
+	<select id="getCommunityList2" resultType="board">
+		SELECT *
+		FROM (
+		    SELECT 
+		        B.BOARD_NO, 
+		        B.BOARD_TITLE, 
+		        B.BOARD_CONTENT, 
+		        B.COUNT, 
+		        B.CREATE_DATE, 
+		        BD.BOARD_DIVIDE_NAME, 
+		        M.USER_NAME, 
+		        COALESCE(COUNT(R.REPLY_NO), 0) AS REPLYCOUNT
+		    FROM BOARD B
+		    JOIN BOARD_DIVIDE BD USING (BOARD_DIVIDE_NO)
+		    JOIN MEMBER M USING (USER_NO)
+		    LEFT JOIN REPLY R ON B.BOARD_NO = R.BOARD_NO
+		    WHERE BOARD_DIVIDE_NO = 50 AND B.STATUS = 'Y'
+		    GROUP BY B.BOARD_NO, B.BOARD_TITLE, B.BOARD_CONTENT, B.COUNT, B.CREATE_DATE, BD.BOARD_DIVIDE_NAME, M.USER_NAME
+		    ORDER BY B.COUNT
+		)
+		WHERE ROWNUM &lt;= 2
+	</select>
+	
+	<!-- 커뮤니티 메인 페이징 -->
+	<select id="selectListCount" resultType="int">
+		SELECT COUNT(*)
+		  FROM BOARD
+		WHERE STATUS='Y' AND 
+		<choose>
+			<when test="boardDivideNo == 1">
+				BOARD_DIVIDE_NO IN ('40','50')
+			</when>
+			<when  test="boardDivideNo != 1">
+				BOARD_DIVIDE_NO = #{boardDivideNo}
+			</when>
+		</choose>
+	</select>
+	
+	<!-- 커뮤니티 메인 보드 리스트 -->
+	<select id="selectList" resultType="board">
+		SELECT BOARD_NO, BOARD_TITLE, BOARD_CONTENT, COUNT, B.USER_NO, M.USER_NAME, BOARD_DIVIDE_NAME, CREATE_DATE
+		FROM BOARD B
+		LEFT JOIN BOARD_DIVIDE USING(BOARD_DIVIDE_NO)
+		LEFT JOIN MEMBER M ON (B.USER_NO = M.USER_NO)
+		WHERE B.STATUS = 'Y' AND 
+		<choose>
+			<when test="boardDivideNo == 1">
+				BOARD_DIVIDE_NO IN ('40','50')
+			</when>
+			<when  test="boardDivideNo != 1">
+				BOARD_DIVIDE_NO = #{boardDivideNo}
+			</when>
+		</choose>
+		ORDER BY
+		<choose>
+			<when test="condition == 'count'">
+				COUNT DESC
+			</when>
+			<when  test="condition == 'date'">
+				CREATE_DATE DESC
+			</when>
+		</choose>
+	</select>
+	
+	<!-- 게시글 조회수 증가 -->	
+	<update id="countList" parameterType="int">
+		UPDATE BOARD
+		SET COUNT =
+		COUNT +1
+		WHERE BOARD_NO = #{boardNo}
+		AND STATUS ='Y'
+	</update>
+	
+	<!-- 글쓰기 -->
+	<insert id="insertBoard" parameterType="board">
+		INSERT INTO BOARD (BOARD_NO, BOARD_TITLE, BOARD_CONTENT, COUNT, CREATE_DATE, STATUS, USER_NO, BOARD_DIVIDE_NO)
+		VALUES(SEQ_BNO.NEXTVAL, #{boardTitle}, #{boardContent}, 0, SYSDATE, 'Y', #{userNo}, #{boardDivideNo})
+	</insert>
+	
+	<!-- 게시글 상세 조회 -->
+	<select id="searchBoard" parameterType="int" resultMap="boardResultSet">
+		SELECT
+		BOARD_NO,
+		BOARD_TITLE,
+		BOARD_CONTENT,
+		COUNT,
+		CREATE_DATE,
+		M.USER_NAME,
+		BD.BOARD_DIVIDE_NAME
+		FROM BOARD B
+		LEFT JOIN MEMBER M ON(B.USER_NO = M.USER_NO)
+		LEFT JOIN BOARD_DIVIDE BD ON(B.BOARD_DIVIDE_NO = BD.BOARD_DIVIDE_NO)
+		WHERE BOARD_NO = #{boardNo}
+		AND B.STATUS =
+		'Y'
+	</select>
+	
+	<!-- 게시글 댓글 작성 -->
+	<insert id="insertReply" parameterType="reply">
+		INSERT INTO REPLY(REPLY_NO, REPLY_CONTENT, CREATE_DATE, STATUS, USER_NO, BOARD_NO)
+		VALUES (SEQ_REPNO.NEXTVAL, #{replyContent},SYSDATE, 'Y', #{userNo}, #{boardNo})
+	</insert>
+	
+	<!-- 게시글 댓글 조회 -->
+	<select id="selectReply" resultType="reply">
+		SELECT REPLY_NO, R.USER_NO, R.REPLY_CONTENT, R.CREATE_DATE, M.USER_NAME
+		FROM REPLY R
+		JOIN MEMBER M ON (M.USER_NO = R.USER_NO)
+		WHERE R.STATUS = 'Y' AND R.BOARD_NO = #{boardNo}
+		ORDER BY R.CREATE_DATE DESC
+	</select>
+	<!-- 게시글 댓글 삭제 -->
+	<update id="deleteReply" parameterType="int">
+		UPDATE REPLY SET STATUS = 'N' WHERE REPLY_NO = #{replyNo}
+	</update>
+	<!-- 게시글 구분 조회 -->
+	<select id="selectBoardDivideList" resultType="boardDivide">
+		SELECT
+		BOARD_DIVIDE_NO,
+		BOARD_DIVIDE_NAME
+		FROM BOARD_DIVIDE
+	</select>
+	<!-- 게시글 수정 -->
+	<update id="updateBoard" parameterType="board">
+		UPDATE BOARD
+		SET
+		BOARD_DIVIDE_NO = #{boardDivideNo},
+		BOARD_CONTENT = #{boardContent},
+		BOARD_TITLE = #{boardTitle}
+		WHERE BOARD_NO = #{boardNo}
+	</update>
+	<!-- 게시글 삭제 -->
+	<update id="deleteBoard" parameterType="int">
+		UPDATE BOARD
+		SET STATUS = 'N'
+		WHERE BOARD_NO = #{boardNo}
+	</update>
+	<update id="deleteReplyList" parameterType="int">
+		UPDATE REPLY
+		SET STATUS = 'N'
+		WHERE BOARD_NO = #{boardNo}
+	</update>
+	<!-- 내가 쓴 글 불러오기 -->
+	<select id="selectBoardList" parameterType="int" resultType="board">
+		SELECT *
+		FROM BOARD
+		WHERE USER_NO = #{userNo} AND STATUS = 'Y'
+	</select>
+	<!-- 내가 쓴 댓글 불러오기 -->
+	<select id="selectReplyList" parameterType="int" resultType="reply">
+		SELECT *
+		FROM REPLY
+		WHERE USER_NO = #{userNo} AND STATUS = 'Y'
+	</select>
+</mapper>

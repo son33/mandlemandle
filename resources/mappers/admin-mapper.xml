@@ -1,0 +1,701 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="adminMapper">
+
+	<resultMap id="memberResultSet" type="member">
+		<id column="USER_NO" property="userNo" />
+		<result column="EMAIL" property="email" />
+		<result column="USER_PWD" property="userPwd" />
+		<result column="USER_NAME" property="userName" />
+		<result column="BIRTH" property="birth" />
+		<result column="GENDER" property="gender" />
+		<result column="PHONE" property="phone" />
+		<result column="ADDRESS" property="address" />
+		<result column="ENROLL_DATE" property="enrollDate" />
+		<result column="MODIFY_DATE" property="modifyDate" />
+		<result column="STATUS" property="status" />
+		<result column="BLACKSTATUS" property="blackStatus" />
+	</resultMap>
+	
+	<resultMap id="boardResultSet" type="board">
+		<id column="BOARD_NO" property="boardNo" />
+		<result column="BOARD_TITLE" property="boardTitle" />
+		<result column="BOARD_CONTENT" property="boardContent" />
+		<result column="COUNT" property="count" />
+		<result column="CREATE_DATE" property="createDate" />
+		<result column="MODIFY_DATE" property="modifyDate" />
+		<result column="STATUS" property="status" />
+		<result column="USER_NO" property="userNo" />
+		<result column="USER_NAME" property="userName" />
+		<result column="BOARD_DIVIDE_NO" property="boardDivideNo" />
+				
+		<collection property="list"
+		 javaType="java.util.ArrayList" ofType="reply"
+		 select="selectReplyList" column="BOARD_NO" />
+	</resultMap>
+	
+	
+	<resultMap id="AttachmentResultSet" type="attachment">
+		<id column = "FILE_NO" property="fileNo"/>
+		<result column = "ORIGIN_NAME" property="originName"/>
+		<result column = "CHANGE_NAME" property="changeName"/>
+		<result column = "FILE_PATH" property="filePath"/>
+		<result column = "UPLOAD_DATE" property="uploadDate"/>
+		<result column = "STATUS" property="status"/>
+		<result column = "FILE_TYPE" property="fileType"/>
+		<result column = "REF_BNO" property="refBno"/>
+		
+	</resultMap>
+	
+	<resultMap id="ReviewResultSet" type="review">
+		<id column = "REVIEW_NO" property="reviewNo"/>
+		<result column = "REVIEW_TITLE" property="reviewTitle"/>
+		<result column = "REVIEW_CONTENT" property="createDate"/>
+		<result column = "CREATE_DATE" property="createDate"/>
+		<result column = "MODIFY_DATE" property="modifyDate"/>
+		<result column = "COUNT" property="count"/>
+		<result column = "STATUS" property="status"/>
+		<result column = "BOARD_DIVIDE_NO" property="boardDivideNo"/>
+		<result column = "USER_NO" property="userNo"/>
+		<result column = "SCORE" property="score"/>
+		<result column = "USER_NAME" property="userName"/>
+	</resultMap>
+	
+	<resultMap id="ReplyResultSet" type="reply">
+		<id column = "REPLY_NO" property="replyNo"/>
+		<result column = "REPLY_CONTENT" property="replyContent"/>
+		<result column = "CREATE_DATE" property="createDate"/>
+		<result column = "MODIFY_DATE" property="modifyDate"/>
+		<result column = "STATUS" property="status"/>
+		<result column = "BOARD_NO" property="boardNo"/>
+		<result column = "BOARD_DIVIDE_NO" property="boardDivideNo"/>
+		<result column = "USER_NO" property="userNo"/>
+		<result column = "USER_NAME" property="userName"/>
+		<result column = "BOARD_DIVIDE_NAME" property="boardDivideName"/>
+	</resultMap>
+	
+	<resultMap id="ReportResultSet" type="report">	
+		<id column = "REPORT_NO" property="reportNo"/>
+		<result column = "REPORT_CONTENT" property="reportContent"/>
+		<result column = "REPORT_DATE" property="reportDate"/>
+		<result column = "USER_NO" property="userNo"/>
+		<result column = "USER_NAME" property="userName"/>
+		<result column = "BOARD_DIVIDE_NO" property="boardDivideNo"/>
+		<result column = "BOARD_DIVIDE_NAME" property="boardDivdeName"/>
+		<result column = "REPLY_NO" property="replyNo"/>
+		<result column = "REF_BNO" property="refBno"/>
+		<result column = "STATUS" property="status"/>
+	</resultMap>
+	
+	<!-- 회원관리 -->
+	
+	<!-- 멘토리스트 -->
+		
+	<select id="selectMentoCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM MEMBER
+		WHERE STATUS='Y'
+		AND MEMBER_DIVIDE_NO = '2'
+	</select>
+	
+	<select id="selectMento" resultType="member">
+		SELECT USER_NO,EMAIL,USER_NAME,GENDER,PHONE,GRADE_NO,ENROLL_DATE FROM MEMBER WHERE STATUS = 'Y' AND MEMBER_DIVIDE_NO ='2'
+	</select>
+	
+	<!-- 멘티리스트 -->
+	<select id="selectMentiCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM MEMBER
+		WHERE STATUS='Y'
+		AND MEMBER_DIVIDE_NO = '3'
+	</select>
+	<select id="selectMenti" resultType="member">
+		SELECT USER_NO,EMAIL,USER_NAME,GENDER,PHONE,GRADE_NO,ENROLL_DATE FROM MEMBER WHERE STATUS = 'Y' AND MEMBER_DIVIDE_NO ='3'
+	</select>
+	
+	<!-- 신고내역 -->
+	
+	
+	<!-- 검색기능 -->
+	<!-- 멘토리스트 -->
+	<select id="selectSearchCount" parameterType="hashmap" resultType="int">
+		SELECT COUNT(*)
+		FROM MEMBER
+		WHERE STATUS = 'Y' AND MEMBER_DIVIDE_NO ='2'
+		<choose>
+			<when test="condition== 'email'">
+				AND EMAIL
+			</when>
+			<when  test="condition== 'name'">
+				AND USER_NAME
+			</when>
+		</choose>
+		LIKE '%'||#{keyword}||'%'
+		ORDER BY ENROLL_DATE DESC
+	</select>
+	
+	
+	<select id="selectSearchList" resultType="member" parameterType="hashmap">
+    SELECT USER_NO, EMAIL, USER_NAME, GENDER, PHONE, GRADE_NO, ENROLL_DATE
+    FROM MEMBER
+    WHERE STATUS='Y' AND MEMBER_DIVIDE_NO='2'
+    <if test="condition == 'email'">
+        AND EMAIL
+    </if>
+    <if test="condition == 'name'">
+        AND USER_NAME
+    </if>
+     LIKE '%'||#{keyword}||'%'
+     ORDER BY ENROLL_DATE DESC
+	</select>
+	
+	<!-- 멘티리스트 -->
+		<select id="selectSearchCount2" parameterType="hashmap" resultType="int">
+		SELECT COUNT(*)
+		FROM MEMBER
+		WHERE STATUS = 'Y' AND MEMBER_DIVIDE_NO ='3'
+		<choose>
+			<when test="condition== 'email'">
+				AND EMAIL
+			</when>
+			<when  test="condition== 'name'">
+				AND USER_NAME
+			</when>
+		</choose>
+		LIKE '%'||#{keyword}||'%'
+		ORDER BY ENROLL_DATE DESC
+	</select>
+	
+	
+	<select id="selectSearchList2" resultType="member" parameterType="hashmap">
+    SELECT USER_NO, EMAIL, USER_NAME, GENDER, PHONE, GRADE_NO, ENROLL_DATE
+    FROM MEMBER
+    WHERE STATUS='Y' AND MEMBER_DIVIDE_NO='3'
+    <if test="condition == 'email'">
+        AND EMAIL
+    </if>
+    <if test="condition == 'name'">
+        AND USER_NAME
+    </if>
+     LIKE '%'||#{keyword}||'%'
+     ORDER BY ENROLL_DATE DESC
+	</select>
+	
+	<!-- 멘토회원삭제 -->
+	<update id="deleteMento" parameterType="_int">
+	UPDATE MEMBER
+	SET STATUS='N'
+	WHERE USER_NO = #{check}
+	</update>
+	
+	<!-- 공지리스트 -->
+	<select id="selectNoticeSearchCount3" parameterType="hashmap" resultType="_int">
+		SELECT COUNT(*)
+		FROM BOARD_DIVIDE D
+		LEFT JOIN BOARD B ON (B.BOARD_DIVIDE_NO = D.BOARD_DIVIDE_NO)
+		LEFT JOIN MEMBER M ON (B.USER_NO = M.USER_NO)	
+		WHERE B.BOARD_DIVIDE_NO = '10' AND B.STATUS='Y'
+		<choose>
+			<when test="condition=='title'">
+				AND B.BOARD_TITLE
+				LIKE '%'||#{keyword}||'%'
+			</when>
+		</choose>
+		ORDER BY CREATE_DATE DESC
+	</select>
+	<select id="selectNoticeCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM BOARD_DIVIDE D
+		LEFT JOIN BOARD B ON (B.BOARD_DIVIDE_NO = D.BOARD_DIVIDE_NO)
+		LEFT JOIN MEMBER M ON (B.USER_NO = M.USER_NO)
+		WHERE B.BOARD_DIVIDE_NO = '10' AND B.STATUS='Y'
+	</select>
+	<select id="selectNoticeSearchList3" resultType="board" parameterType="hashmap">
+		SELECT BOARD_NO, BOARD_TITLE, CREATE_DATE, USER_NAME
+		FROM BOARD_DIVIDE D
+		LEFT JOIN BOARD B ON (B.BOARD_DIVIDE_NO = D.BOARD_DIVIDE_NO)
+		LEFT JOIN MEMBER M ON (B.USER_NO = M.USER_NO)	
+		WHERE B.BOARD_DIVIDE_NO = '10' AND B.STATUS='Y'
+		<if test="condition=='title'">
+		  AND B.BOARD_TITLE
+		</if>
+		LIKE '%'||#{keyword}||'%'
+		ORDER BY CREATE_DATE DESC
+	</select>
+	
+	<select id="selectNotice" resultType="board">
+		SELECT BOARD_NO, BOARD_TITLE, CREATE_DATE, USER_NAME
+		FROM BOARD_DIVIDE D
+		LEFT JOIN BOARD B ON (B.BOARD_DIVIDE_NO = D.BOARD_DIVIDE_NO)
+		LEFT JOIN MEMBER M ON (B.USER_NO = M.USER_NO)
+		WHERE B.BOARD_DIVIDE_NO = '10' AND B.STATUS='Y'
+	</select>
+	<select id="selectNoticeDetail" resultType="board">
+		SELECT BOARD_NO, BOARD_TITLE, BOARD_CONTENT,CREATE_DATE
+		FROM BOARD
+		WHERE STATUS='Y' AND BOARD_DIVIDE_NO = '10' AND BOARD_NO = #{boardNo}
+	</select>
+	<select id="selectNoticeFile" resultType="attachment">
+		SELECT FILE_NO,ORIGIN_NAME,CHANGE_NAME,FILE_PATH, FILE_TYPE,REF_BNO
+		FROM ATTACHMENT
+		WHERE REF_BNO=#{boardNo} AND FILE_TYPE = 10
+	</select>
+	<!-- 공지삭제 -->
+	<update id="deleteNotice" parameterType="_int">
+		UPDATE BOARD
+		SET STATUS='N'
+		WHERE BOARD_NO = #{boardNo}
+	</update>
+	
+	<!-- 공지 등록 -->
+	<insert id="noticeInsert" parameterType="board">
+		INSERT INTO BOARD(BOARD_NO,BOARD_TITLE,BOARD_CONTENT,USER_NO,BOARD_DIVIDE_NO)
+		VALUES (SEQ_BNO.NEXTVAL,#{boardTitle},#{boardContent},1,10)
+	</insert>
+	
+	<insert id="AttachmentNoticeInsert" parameterType="attachment">
+		INSERT INTO ATTACHMENT(FILE_NO,REF_BNO,ORIGIN_NAME,CHANGE_NAME,FILE_PATH,FILE_TYPE)
+		VALUES(SEQ_ATTNO.NEXTVAL,SEQ_BNO.CURRVAL,#{originName},#{changeName},#{filePath},1)
+	</insert>
+	<!-- 공지 수정 -->
+	<update id="updateNotice" parameterType="board">
+		UPDATE BOARD
+		SET BOARD_TITLE=#{boardTitle},
+		BOARD_CONTENT=#{boardContent}	
+		WHERE BOARD_NO=#{boardNo}
+	</update>
+	<update id="updateAttachment" parameterType="attachment">
+		UPDATE ATTACHMENT
+		SET ORIGIN_NAME=#{originName},
+			CHANGE_NAME=#{changeName},
+			FILE_PATH=#{filePath},
+			UPLOAD_DATE=SYSDATE
+		WHERE FILE_NO=#{fileNo}
+	</update>
+	<insert id="insertNewAttachment" parameterType="attachment">
+		INSERT INTO ATTACHMENT(FILE_NO,REF_BNO,ORIGIN_NAME,CHANGE_NAME,FILE_PATH,FILE_TYPE)
+		VALUES(SEQ_ATTNO.NEXTVAL,#{refBno},#{originName},#{changeName},#{filePath},1)
+	</insert>
+	<!-- FAQ리스트 -->
+	<select id="selectFAQList" resultType="board">
+    SELECT BOARD_NO, BOARD_TITLE, BOARD_CONTENT
+    FROM BOARD
+    WHERE STATUS='Y' AND BOARD_DIVIDE_NO='20'
+	</select>
+	<!-- 커뮤니티 리스트 -->
+	<select id="selectcommunitySearchCount3" parameterType="hashmap" resultType="_int">
+		SELECT COUNT(*)
+		FROM BOARD_DIVIDE D
+		LEFT JOIN BOARD B ON (B.BOARD_DIVIDE_NO = D.BOARD_DIVIDE_NO)
+		LEFT JOIN MEMBER M ON (B.USER_NO = M.USER_NO)	
+		WHERE B.BOARD_DIVIDE_NO IN ('40','50') AND B.STATUS='Y'
+		<choose>
+			<when test="condition=='title'">
+				AND B.BOARD_TITLE
+				LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="condition=='name'">
+				AND M.USER_NAME
+				LIKE '%'||#{keyword}||'%'
+				
+			</when>
+		</choose>
+		ORDER BY CREATE_DATE DESC
+	</select>
+	<select id="selectCommunityCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM BOARD_DIVIDE D
+		LEFT JOIN BOARD B ON (B.BOARD_DIVIDE_NO = D.BOARD_DIVIDE_NO)
+		LEFT JOIN MEMBER M ON (B.USER_NO = M.USER_NO)
+		WHERE B.BOARD_DIVIDE_NO IN ('40','50') AND B.STATUS='Y'
+	</select>
+	<select id="selectCommunitySearchList3" resultType="board" parameterType="hashmap">
+		SELECT BOARD_NO, BOARD_TITLE, CREATE_DATE, USER_NAME, COUNT,BOARD_DIVIDE_NAME
+		FROM BOARD_DIVIDE D
+		LEFT JOIN BOARD B ON (B.BOARD_DIVIDE_NO = D.BOARD_DIVIDE_NO)
+		LEFT JOIN MEMBER M ON (B.USER_NO = M.USER_NO)	
+		WHERE B.BOARD_DIVIDE_NO IN ('40','50') AND B.STATUS='Y'
+		<if test="condition=='title'">
+		  AND B.BOARD_TITLE
+		</if>
+		<if test = "condition == 'name'">
+		 AND M.USER_NAME
+		</if>
+		LIKE '%'||#{keyword}||'%'
+		ORDER BY CREATE_DATE DESC
+	</select>
+	
+	<select id="selectCommunity" resultType="board">
+		SELECT BOARD_NO, BOARD_TITLE, CREATE_DATE, USER_NAME,COUNT, BOARD_DIVIDE_NAME
+		FROM BOARD_DIVIDE D
+		LEFT JOIN BOARD B ON (B.BOARD_DIVIDE_NO = D.BOARD_DIVIDE_NO)
+		LEFT JOIN MEMBER M ON (B.USER_NO = M.USER_NO)
+		WHERE B.BOARD_DIVIDE_NO IN ('40','50') AND B.STATUS='Y'
+	</select>
+	<!-- 커뮤니티 상세보기 -->
+	<select id="selectCommunityDetail" resultType="board">
+		SELECT BOARD_NO, BOARD_TITLE, BOARD_CONTENT,CREATE_DATE,COUNT,USER_NAME,BOARD_DIVIDE_NAME
+		FROM BOARD_DIVIDE D
+		LEFT JOIN BOARD B ON (D.BOARD_DIVIDE_NO = B.BOARD_DIVIDE_NO)
+		LEFT JOIN MEMBER M ON (B.USER_NO = M.USER_NO)
+	 	WHERE B.STATUS='Y' AND B.BOARD_DIVIDE_NO IN ('40','50') AND B.BOARD_NO = #{boardNo}
+	</select>
+	<select id="selectCommunityFile" resultType="attachment">
+		SELECT FILE_NO,ORIGIN_NAME,CHANGE_NAME,FILE_PATH, FILE_TYPE, REF_BNO
+		FROM ATTACHMENT
+		WHERE REF_BNO=#{boardNo} AND FILE_TYPE = 1
+	</select>
+	<!-- 리뷰 리스트 -->
+	<select id="selectreviewSearchCount3" parameterType="hashmap" resultType="_int">
+		SELECT COUNT(*)
+		FROM REVIEW R
+		LEFT JOIN MEMBER M ON (R.USER_NO = M.USER_NO)	
+		WHERE R.STATUS='Y'
+		<choose>
+			<when test="condition=='title'">
+				AND R.REVIEW_TITLE
+				LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="condition=='name'">
+				AND M.USER_NAME
+				LIKE '%'||#{keyword}||'%'
+				
+			</when>
+		</choose>
+		ORDER BY CREATE_DATE DESC
+	</select>
+	<select id="selectReviewCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM REVIEW R
+		LEFT JOIN MEMBER M ON (R.USER_NO = M.USER_NO)
+		WHERE R.STATUS='Y'
+	</select>
+	<select id="selectReviewSearchList3" resultType="review" parameterType="hashmap">
+		SELECT REVIEW_NO, REVIEW_TITLE, CREATE_DATE, M.USER_NAME
+		FROM REVIEW R
+		LEFT JOIN MEMBER M ON (R.USER_NO = M.USER_NO)	
+		WHERE R.STATUS='Y'
+		<if test="condition=='title'">
+		  AND R.REVIEW_TITLE
+		</if>
+		<if test = "condition == 'name'">
+		 AND M.USER_NAME
+		</if>
+		LIKE '%'||#{keyword}||'%'
+		ORDER BY CREATE_DATE DESC
+	</select>
+	
+	<select id="selectReview" resultType="review">
+		SELECT REVIEW_NO, REVIEW_TITLE, CREATE_DATE, M.USER_NAME
+		FROM REVIEW R
+		LEFT JOIN MEMBER M ON (R.USER_NO = M.USER_NO)
+		WHERE R.STATUS='Y'
+		ORDER BY CREATE_DATE DESC
+	</select>
+	<!-- 리뷰 상세 -->
+		<select id="selectReviewDetail" resultType="review">
+		SELECT REVIEW_NO, REVIEW_TITLE, REVIEW_CONTENT,CREATE_DATE ,USER_NAME
+		FROM REVIEW R
+		LEFT JOIN MEMBER M ON (R.USER_NO = M.USER_NO)
+	 	WHERE R.STATUS='Y' AND R.REVIEW_NO = #{reviewNo}
+	</select>
+<!-- 	<select id="selectReviewFile" resultType="attachment"> -->
+<!-- 		SELECT FILE_NO,ORIGIN_NAME,CHANGE_NAME,FILE_PATH, FILE_TYPE,REF_BNO -->
+<!-- 		FROM ATTACHMENT -->
+<!-- 		WHERE REF_BNO=#{reviewNo} -->
+<!-- 	</select> -->
+	<!-- 리뷰 삭제 -->
+	<update id="deleteReview" parameterType="_int">
+		UPDATE REVIEW
+		SET STATUS='N'
+		WHERE REVIEW_NO = #{reviewNo}
+	</update>
+	
+	<!-- 댓글 리스트 -->
+		<select id="selectreplySearchCount3" parameterType="hashmap" resultType="_int">
+		SELECT COUNT(*)
+		FROM REPLY R 
+		LEFT JOIN BOARD B ON (R.BOARD_NO = B.BOARD_NO)
+		LEFT JOIN BOARD_DIVIDE D ON(B.BOARD_DIVIDE_NO = D.BOARD_DIVIDE_NO)
+		LEFT JOIN MEMBER M ON (R.USER_NO = M.USER_NO)	
+		WHERE R.STATUS='Y'
+		<choose>
+			<when test="condition=='content'">
+				AND R.REPLY_CONTENT
+				LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="condition=='name'">
+				AND M.USER_NAME
+				LIKE '%'||#{keyword}||'%'
+				
+			</when>
+		</choose>
+		
+	</select>
+	<select id="selectReplyCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM REPLY R 
+		LEFT JOIN BOARD B ON (R.BOARD_NO = B.BOARD_NO)
+		LEFT JOIN BOARD_DIVIDE D ON(B.BOARD_DIVIDE_NO = D.BOARD_DIVIDE_NO)
+		LEFT JOIN MEMBER M ON (R.USER_NO = M.USER_NO)
+		WHERE R.STATUS='Y'	
+	</select>
+	<select id="selectreplySearchList3" resultType="reply" parameterType="hashmap">
+		SELECT REPLY_NO, REPLY_CONTENT, R.CREATE_DATE, M.USER_NAME, D.BOARD_DIVIDE_NAME, R.BOARD_NO
+		FROM REPLY R 
+		LEFT JOIN BOARD B ON (R.BOARD_NO = B.BOARD_NO)
+		LEFT JOIN BOARD_DIVIDE D ON(B.BOARD_DIVIDE_NO = D.BOARD_DIVIDE_NO)
+		LEFT JOIN MEMBER M ON (R.USER_NO = M.USER_NO)	
+		WHERE R.STATUS='Y'
+		<if test="condition=='content'">
+		  AND R.REPLY_CONTENT
+		</if>
+		<if test = "condition == 'name'">
+		 AND M.USER_NAME
+		</if>
+		LIKE '%'||#{keyword}||'%'
+		ORDER BY R.CREATE_DATE DESC
+	</select>
+	
+	<select id="selectReply" resultType="reply">
+		SELECT REPLY_NO, REPLY_CONTENT, R.CREATE_DATE, M.USER_NAME, D.BOARD_DIVIDE_NAME, R.BOARD_NO
+		FROM REPLY R 
+		LEFT JOIN BOARD B ON (R.BOARD_NO = B.BOARD_NO)
+		LEFT JOIN BOARD_DIVIDE D ON(B.BOARD_DIVIDE_NO = D.BOARD_DIVIDE_NO)
+		LEFT JOIN MEMBER M ON (R.USER_NO = M.USER_NO)	
+		WHERE R.STATUS='Y'
+		ORDER BY R.CREATE_DATE DESC
+	</select>
+	<!-- 댓글 삭제 -->
+	<update id="deleteReply" parameterType="_int">
+		UPDATE REPLY
+		SET STATUS='N'
+		WHERE REPLY_NO = #{replyNo}
+	</update>
+	<!-- FAQ 등록 -->
+	<insert id="FAQInsert" parameterType="board">
+		INSERT INTO BOARD(BOARD_NO,BOARD_TITLE,BOARD_CONTENT,USER_NO,BOARD_DIVIDE_NO)
+		VALUES (SEQ_BNO.NEXTVAL,#{boardTitle},#{boardContent},1,20)
+	</insert>
+	
+	<insert id="AttachmentFAQInsert" parameterType="attachment">
+		INSERT INTO ATTACHMENT(FILE_NO,REF_BNO,ORIGIN_NAME,CHANGE_NAME,FILE_PATH,FILE_TYPE)
+		VALUES(SEQ_ATTNO.NEXTVAL,SEQ_BNO.CURRVAL,#{originName},#{changeName},#{filePath},1)
+	</insert>
+	
+	<!-- 신고내역 -->
+	<!-- 커뮤니티신고리스트 -->
+	<select id="selectReplyBoardSearchCount3" parameterType="hashmap" resultType="_int">
+		SELECT COUNT(*)
+  		FROM REPORT R
+    	JOIN MEMBER M USING (USER_NO)
+   		WHERE R.STATUS='Y' AND R.BOARD_DIVIDE_NO IN ('40','50')
+   		<choose>
+			<when test="condition=='content'">
+				AND R.REPORT_CONTENT
+				LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="condition=='name'">
+				AND M.USER_NAME
+				LIKE '%'||#{keyword}||'%'
+				
+			</when>
+		</choose>
+		
+	</select>
+	<select id="selectReplyBoardCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM REPORT R
+    	JOIN MEMBER M USING (USER_NO)
+   		WHERE R.STATUS='Y' AND R.BOARD_DIVIDE_NO IN ('40','50')
+	</select>
+	<select id="selectReplyBoardSearchList3" resultType="report" parameterType="hashmap">
+		SELECT REPORT_NO, REPORT_CONTENT, REPORT_DATE, USER_NAME, BOARD_DIVIDE_NAME,REF_BNO
+		FROM REPORT R 
+		LEFT JOIN BOARD B ON (R.REF_BNO = B.BOARD_NO)
+		LEFT JOIN BOARD_DIVIDE D ON(B.BOARD_DIVIDE_NO = D.BOARD_DIVIDE_NO)
+		LEFT JOIN MEMBER M ON (R.USER_NO = M.USER_NO)	
+		WHERE R.STATUS='Y' AND R.BOARD_DIVIDE_NO IN ('40','50') 
+		<if test="condition=='content'">
+		  AND R.REPORT_CONTENT
+		</if>
+		<if test = "condition == 'name'">
+		 AND M.USER_NAME
+		</if>
+		LIKE '%'||#{keyword}||'%'
+		ORDER BY R.REPORT_DATE DESC
+	</select>
+	
+	<select id="selectReplyBoard" resultType="report">
+		SELECT REPORT_NO, REPORT_CONTENT, REPORT_DATE, USER_NAME, BOARD_DIVIDE_NAME, REF_BNO
+		FROM REPORT R 
+		LEFT JOIN BOARD B ON (R.REF_BNO = B.BOARD_NO)
+		LEFT JOIN BOARD_DIVIDE D ON(B.BOARD_DIVIDE_NO = D.BOARD_DIVIDE_NO)
+		LEFT JOIN MEMBER M ON (R.USER_NO = M.USER_NO)	
+		WHERE R.STATUS='Y' AND R.BOARD_DIVIDE_NO IN ('40','50') 
+	</select>
+	
+	<!-- 신고내역 커뮤니티 상세 -->
+	<select id="selectReportBoardDetail" resultType="board">
+		SELECT BOARD_NO, BOARD_TITLE, BOARD_CONTENT,CREATE_DATE,COUNT,USER_NAME,BOARD_DIVIDE_NAME
+		FROM BOARD_DIVIDE D
+		LEFT JOIN BOARD B ON (D.BOARD_DIVIDE_NO = B.BOARD_DIVIDE_NO)
+		LEFT JOIN MEMBER M ON (B.USER_NO = M.USER_NO)
+	 	WHERE B.STATUS='Y' AND B.BOARD_DIVIDE_NO IN ('40','50') AND B.BOARD_NO = #{refBno}
+	</select>
+	<select id="selectReportBoardFile" resultType="attachment">
+		SELECT FILE_NO,ORIGIN_NAME,CHANGE_NAME,FILE_PATH, FILE_TYPE,REF_BNO
+		FROM ATTACHMENT
+		WHERE REF_BNO=#{refBno}
+	</select>
+	
+	<!-- 커뮤니티 확인 목록지우기 -->
+	<update id="deleteReportCommunity" parameterType="_int">
+		UPDATE REPORT
+		SET STATUS='N'
+		WHERE REPORT_NO = #{reportNo}
+	</update>
+	<!-- 신고내역 게시글 목록 둘다 지우기 -->
+	<update id="deleteReportList" parameterType="_int">
+		UPDATE REPORT
+		SET STATUS='N'
+		WHERE REPORT_NO = #{reportNo}
+	</update>
+	<update id="deleteBoardReport" parameterType="_int">
+		UPDATE BOARD
+		SET STATUS='N'
+		WHERE BOARD_NO = #{refBno}
+	</update>
+	
+	<!-- 리뷰신고리스트 -->
+	<select id="selectReportReviewSearchCount3" parameterType="hashmap" resultType="_int">
+		SELECT COUNT(*)
+  		FROM REPORT R
+    	JOIN MEMBER M USING (USER_NO)
+   		WHERE R.STATUS='Y'
+   		<choose>
+			<when test="condition=='content'">
+				AND R.REPORT_CONTENT
+				LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="condition=='name'">
+				AND M.USER_NAME
+				LIKE '%'||#{keyword}||'%'
+			</when>
+		</choose>
+		
+	</select>
+	<select id="selectReportReviewCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM REPORT R
+    	JOIN MEMBER M USING (USER_NO)
+   		WHERE R.STATUS='Y'
+	</select>
+	<select id="selectReportReviewSearchList3" resultType="report" parameterType="hashmap">
+		SELECT REPORT_NO, REPORT_CONTENT, REPORT_DATE, USER_NAME, REF_PNO
+		FROM REPORT R
+		LEFT JOIN REVIEW B ON (R.REF_BNO = B.REVIEW_NO)
+		LEFT JOIN PORTFOLIO P ON(B.REF_PNO = P.PTF_NO)
+		LEFT JOIN MEMBER M ON (R.USER_NO = M.USER_NO)	
+		WHERE R.STATUS='Y'
+		<if test="condition=='content'">
+		  AND R.REPORT_CONTENT
+		</if>
+		<if test = "condition == 'name'">
+		 AND M.USER_NAME
+		</if>
+		LIKE '%'||#{keyword}||'%'
+		ORDER BY R.REPORT_DATE DESC
+	</select>
+	
+	<select id="selectReportReviewBoard" resultType="report">
+		SELECT REPORT_NO, REPORT_CONTENT, REPORT_DATE, USER_NAME, REF_PNO
+		FROM REPORT R
+		LEFT JOIN REVIEW B ON (R.REF_BNO = B.REVIEW_NO)
+		LEFT JOIN PORTFOLIO P ON(B.REF_PNO = P.PTF_NO)
+		LEFT JOIN MEMBER M ON (R.USER_NO = M.USER_NO)
+		WHERE R.STATUS='Y'
+	</select>
+	
+	<!-- 신고리뷰상세 -->
+	<select id="selectReportReviewDetail" resultType="REVIEW">
+		SELECT REVIEW_NO, REVIEW_TITLE, REVIEW_CONTENT,R.CREATE_DATE,M.USER_NAME
+		FROM REVIEW R
+		LEFT JOIN MEMBER M ON (R.USER_NO = M.USER_NO)
+	 	WHERE R.STATUS='Y' AND R.REVIEW_NO = #{refBno}
+	</select>
+	<select id="selectReportReviewFile" resultType="attachment">
+		SELECT FILE_NO,ORIGIN_NAME,CHANGE_NAME,FILE_PATH, FILE_TYPE,REF_BNO
+		FROM ATTACHMENT
+		WHERE REF_BNO=#{refBno}
+	</select>
+	<!-- 신고리뷰상세삭제 -->
+	<update id="deleteReviewReport" parameterType="_int">
+		UPDATE REVIEW
+		SET STATUS='N'
+		WHERE REVIEW_NO = #{refBno}
+	</update>
+	
+	<!-- 댓글신고리스트 -->
+	<select id="selectReportReplySearchCount3" parameterType="hashmap" resultType="_int">
+		SELECT COUNT(*)
+		FROM REPORT R
+    	JOIN MEMBER M USING (USER_NO)
+   		WHERE R.STATUS='Y' AND REPLY_NO IS NOT NULL
+   		<choose>
+			<when test="condition=='content'">
+				AND R.REPORT_CONTENT
+				LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="condition=='name'">
+				AND M.USER_NAME
+				LIKE '%'||#{keyword}||'%'
+				
+			</when>
+		</choose>
+		
+	</select>
+	<select id="selectReportReplyCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM REPORT R
+    	JOIN MEMBER M USING (USER_NO)
+   		WHERE R.STATUS='Y' AND REPLY_NO IS NOT NULL
+	</select>
+	<select id="selectReportReplySearchList3" resultType="REPORT" parameterType="hashmap">
+		SELECT REPORT_NO, REPORT_CONTENT, REPORT_DATE, USER_NAME,REPLY_NO
+		FROM REPORT R 
+		LEFT JOIN MEMBER M ON (R.USER_NO = M.USER_NO)	
+		WHERE R.STATUS='Y'  AND REPLY_NO IS NOT NULL
+		<if test="condition=='content'">
+		  AND R.REPORT_CONTENT
+		</if>
+		<if test = "condition == 'name'">
+		 AND M.USER_NAME
+		</if>
+		LIKE '%'||#{keyword}||'%'
+		ORDER BY R.REPORT_DATE DESC
+	</select>
+	
+	<select id="selectReportReplyBoard" resultType="report">
+		SELECT REPORT_NO, REPORT_CONTENT, REPORT_DATE, USER_NAME,REPLY_NO
+		FROM REPORT R 
+		LEFT JOIN MEMBER M ON (R.USER_NO = M.USER_NO)	
+		WHERE R.STATUS='Y'  AND REPLY_NO IS NOT NULL
+	</select>
+	
+	<!-- 신고 댓글 상세 -->
+	<select id="selectReportReplyDetail" resultType="reply">
+		SELECT REPLY_NO, REPLY_CONTENT,CREATE_DATE,USER_NAME
+		FROM REPLY R 
+		LEFT JOIN MEMBER M ON (R.USER_NO = M.USER_NO)
+	 	WHERE R.STATUS='Y' AND REPLY_NO = #{replyNo}
+	</select>
+	<!-- 신고 댓글 상세삭제 -->
+	<update id="deleteReplyReport" parameterType="_int">
+		UPDATE REPLY
+		SET STATUS='N'
+		WHERE REPLY_NO = #{replyNo}
+	</update>
+</mapper>

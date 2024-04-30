@@ -1,0 +1,75 @@
+@charset "UTF-8";
+@font-face {
+  font-family: "GmarketBold";
+  src: url("../font/GmarketSansTTFBold.ttf") format("truetype");
+}
+@font-face {
+  font-family: "GmarketMedium";
+  src: url("../font/GmarketSansTTFMedium.ttf") format("truetype");
+}
+*{font-family: "GmarketMedium";}
+/* 공통 */
+body{height:100%; font-family:'Nanum Gothic',sans-serif; background:#fff; color:black; font-size: 16px; font-weight:300;}
+*{box-sizing: border-box; margin:0; padding:0;}
+ul, li{list-style: none outside;}
+img{width:100%; height:100%;}
+a{text-decoration: none;}
+
+/* 우클릭 제거 */
+* {-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-o-user-select:none;user-select:none;-webkit-user-drag:none;-khtml-user-drag:none;-moz-user-drag:none;-o-user-drag:none;}
+
+/* main */
+html {height:-webkit-fill-available;}
+main {height:-webkit-fill-available; overflow-x:auto;}
+.body-wrapper{display:flex; flex-direction:column; position:relative; min-width:1000px; min-height:100%; padding: 75px 0 260px;}
+
+/* header */ 
+.head{position:fixed; height:80px; top:0; left:0; right:0; width:100%; min-width:1280px; z-index: 12;}
+
+/* 네비게이션 시작 */
+.nav{width:1000px; margin:0 auto;}
+.navi{width:100%; min-width:1200px; height:100%; display:flex; justify-content:center; position:absolute; top:0; left:0; right:0; background-color:white;}
+.navList{display: flex; justify-content:center; width:1100px;}
+.nav-logo{width:100px; z-index:1;}
+.nav-logo>a{display:block; height: 100%;}
+.nav-contents{width:600px;}
+.searchBar{width:500px; display:flex; position:relative; align-items:flex-start;}
+.searchBar form{width:100%}
+.searchBar input{width:85%; border:1px solid #bbb; border-radius:8px; padding:10px 12px; font-size:14px; border-color: #57D9FF; margin-top:20px; margin-left:20px;}
+.searchList{width:400px; fint-size:14px; padding:14px; margin-left:20px;}
+.search-depth1{width:400px; background-color:white; z-index:100}
+.searchBar button{height:40px; width:50px; color:white; background-color:#47b6d8; border:white; border-radius:8px;}
+.nav-depth1{height:100%; margin-top:25px; margin-left:auto; text-align:center; float:right;}
+.nav-depth1>div{width:120px; height:50px; float:left;}
+.nav-depth1 a{height:100%; width:100%; color:black; font-weight:600; font-size:20px;}
+.searchList ul.search-depth1{max-height:300px; overflow-y:auto;}
+/* 네비게이션 끝 */
+
+/* side-bar */
+.sidebar{overflow-x:hidden; position:fixed; top:80px; left:0; z-index:100;}
+.sidebar-wrapper {min-height:100vh;	margin-left:0; padding:0.875rem 1.25rem; font-size:1.2rem;}
+.sidebar-wrapper .list-group {width: 11rem;}
+@media (max-width: 1100px) {
+  .sidebar-wrapper {
+    width: 0px;
+  }
+}
+
+/* container */
+.container{display:flex; justify-content:center; min-width:1000px; min-height:860px;}
+.content{width:1000px; height: 100%; display: flex; flex-direction:column; align-content:center; flex-wrap:wrap;}
+
+/* top */
+.topBar{display:block; position:fixed; bottom:110px; left:49%; margin:0 0 0 635px; z-index:10;}
+.fixed {position:absolute; bottom:360px}
+.top{text-align:center;}
+.top>a{color:black; font-size:25px; font-weight:600;}
+
+/* footer */
+.footArea{position:absolute; display:flex; height:260px; padding:45px; width:100%; min-width:1280px; margin:0 auto; background-color:#292929; justify-content:center; z-index:1000;}
+.info{display:flex; width:100%;}
+.infoList{display:flex; margin:0 auto;}
+.l1{width:110px; padding:0;}
+.l1>li>a{text-decoration:none; color:white;}
+.l2>li{color:gray; padding-right:60px;}
+/* 공통 끝 */
